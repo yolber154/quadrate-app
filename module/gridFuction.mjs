@@ -70,7 +70,6 @@ const drowAllRectangles = array => {
     divGrid.innerHTML = ""
     divGrid.appendChild(divLines)
     array.forEach(element => {
-        console.log(element)
         if(element.visible) drowRectangle(element)
     });
 }

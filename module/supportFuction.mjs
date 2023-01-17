@@ -163,7 +163,6 @@ const insertRectProps = obj => {
             input.value = value[i]
             input.addEventListener("keyup", () => sprt_a(obj.id))
             input.addEventListener("input", () => sprt_a(obj.id))
-
         }else if(i === 4){
             input.setAttribute("type", "color")
             input.classList.add(`${properie2[i]}-${obj.id}`)
@@ -193,9 +192,7 @@ const quitRectOfSystem = id => {
     let state = giveState()
     const array = state.filter(element => element.id != id)
     resetState()
-
     array.forEach(rectObj => state.push(rectObj))
-
     saveStateInStorage()
 }
 
