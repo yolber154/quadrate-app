@@ -78,7 +78,7 @@ const sprt_a = (id) => {
     obj.positionX = Number(positionX)
     obj.positionY = Number(positionY)
     obj.background = color
-    obj.backgroundHSL = false // Resolver el problema del color
+    obj.backgroundHSL = [0, 50, 50] // Resolver el problema del color
 
     drowAllRectangles(state)
     insetAllRectsProps(state)
@@ -168,7 +168,7 @@ const insertRectProps = obj => {
         }else if(i === 4){
             input.setAttribute("type", "color")
             input.classList.add(`${properie2[i]}-${obj.id}`)
-            input.setAttribute("value", hslToHex(...obj.backgroundHSL))
+            input.setAttribute("value", hslToHex(obj.background[0], obj.background[1], obj.background[2] ))
             input.addEventListener("change", () => sprt_a(obj.id))
         }else{
             input.setAttribute("type", "button")

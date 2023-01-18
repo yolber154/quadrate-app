@@ -26,21 +26,53 @@ createRectInputs.forEach(input => {
 tools.addEventListener("click", (event) => {
     const tools = document.querySelectorAll(".tools > svg")
     const element = event.target
-    
-    console.log(element)
 
     tools.forEach(element => element.classList.remove("active"))
     element.tagName === "svg" && element.classList.add("active")
     element.tagName === "path" && element.parentElement.classList.add("active")
 
     if(element.id === "select" || element.parentElement.id === "select"){
-        grid.addEventListener("mousedown", hendleMoveRect)
+        grid.addEventListener("mousedown", handleMoveRect)
     }else{
-        grid.removeEventListener("mousedown", hendleMoveRect)
+        grid.removeEventListener("mousedown", handleMoveRect)
+    }
+
+    if(element.id === "hand" || element.parentElement.id === "hand"){
+        grid.addEventListener("mousedown", handleMoveGrid)
+        grid.style.cursor = "grab"
+    }else{
+        grid.removeEventListener("mousedown", handleMoveGrid)
+        grid.style.cursor = "auto"
     }
 })
 
-const hendleMoveRect = event => {
+const handleMoveGrid = evt => {
+    let grid
+    if(evt.target.id === "grid") grid = evt.target
+    if(evt.target.parentElement.id === "grid") grid = evt.target.parentElement
+    
+    const clickX = evt.clientX
+    const clickY = evt.clientY
+    let speed = 3
+    let scrollLeft = grid.scrollLeft
+    let scrollTop = grid.scrollTop
+
+    const handleMove = e => {
+        const diffX = e.clientX - clickX
+        const diffY = e.clientY - clickY
+        grid.scrollLeft = scrollLeft + speed*(-diffX)
+        grid.scrollTop = scrollTop + speed*(-diffY)
+    }
+
+    grid.addEventListener("mousemove", handleMove)
+    grid.addEventListener("mouseup", () => {
+        grid.removeEventListener("mousemove", handleMove)
+    })
+}
+
+grid.addEventListener("mousedown", handleMoveGrid)
+
+const handleMoveRect = event => {
     const clickX = event.layerX
     const clickY = event.layerY
     const state = giveState()
@@ -53,7 +85,7 @@ const hendleMoveRect = event => {
     const positionX = rectangle.positionX
     const positionY = rectangle.positionY
 
-    const soportFunction = (e) => {
+    const handleMovingRect = (e) => {
         const movingX = positionX + e.layerX - clickX
         const movingY = positionY + e.layerY - clickY
         rectangle.positionX = movingX >= 0 ?  movingX : 0
@@ -64,9 +96,9 @@ const hendleMoveRect = event => {
         insetAllRectsProps(state)
     }
 
-    grid.addEventListener("mousemove", soportFunction)
+    grid.addEventListener("mousemove", handleMovingRect)
     grid.addEventListener("mouseup", () => {
-        grid.removeEventListener("mousemove", soportFunction)
+        grid.removeEventListener("mousemove", handleMovingRect)
     })
 }
 

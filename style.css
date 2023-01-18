@@ -30,7 +30,6 @@ body{
 
 .container .tools svg{
     padding: 14px;
-    cursor: pointer;
     box-sizing: content-box;
 }
 
@@ -59,6 +58,7 @@ body{
     position: absolute;
     top: 0;
     left: 0;
+    z-index: -1;
 }
 
 .container .grid .lines .line{
@@ -75,8 +75,6 @@ body{
     height: 100%;
     width: 1px;     /** Propiedad Configurable **/
 }
-
-
 
 /* ----------Estilizando .left-panel------------ */
 
@@ -188,26 +186,3 @@ input{
 .container .wrapper-rectangles-list .properie-rectangle input:last-child{
     border-bottom: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-/* .container .wrapper-rectangles-list .rectangle:nth-child(1){
-    border-left: 4px solid red;
-}
-
-.container .wrapper-rectangles-list .rectangle:nth-child(2){
-    border-left: 4px solid green;
-}
-
-.container .wrapper-rectangles-list .rectangle:nth-child(3){
-    border-left: 4px solid blue;
-} */
