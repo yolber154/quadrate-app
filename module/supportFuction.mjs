@@ -78,8 +78,10 @@ const sprt_a = (id) => {
     obj.positionX = Number(positionX)
     obj.positionY = Number(positionY)
     obj.background = color
+    obj.backgroundHSL = false // Resolver el problema del color
 
     drowAllRectangles(state)
+    insetAllRectsProps(state)
     saveStateInStorage()
 }
 

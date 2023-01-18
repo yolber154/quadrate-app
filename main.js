@@ -26,12 +26,21 @@ createRectInputs.forEach(input => {
 tools.addEventListener("click", (event) => {
     const tools = document.querySelectorAll(".tools > svg")
     const element = event.target
+    
+    console.log(element)
+
     tools.forEach(element => element.classList.remove("active"))
     element.tagName === "svg" && element.classList.add("active")
     element.tagName === "path" && element.parentElement.classList.add("active")
+
+    if(element.id === "select" || element.parentElement.id === "select"){
+        grid.addEventListener("mousedown", hendleMoveRect)
+    }else{
+        grid.removeEventListener("mousedown", hendleMoveRect)
+    }
 })
 
-grid.addEventListener("mousedown", (event) => {
+const hendleMoveRect = event => {
     const clickX = event.layerX
     const clickY = event.layerY
     const state = giveState()
@@ -59,7 +68,7 @@ grid.addEventListener("mousedown", (event) => {
     grid.addEventListener("mouseup", () => {
         grid.removeEventListener("mousemove", soportFunction)
     })
-})
+}
 
 button.addEventListener("click", insertRectInSystem)
 
