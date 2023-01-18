@@ -50,11 +50,9 @@ const drowRectangle = obj => {
     rectangle.style.gridColumn = `${obj.positionX + 1} / ${obj.positionX + 1 + obj.width}`
     rectangle.style.gridRow = `${obj.positionY + 1} / ${obj.positionY + 1 + obj.height}`
     rectangle.style.background = obj.background
+    // rectangle.style.opacity = ".85"
 
     rectangle.setAttribute("id", `identify-${obj.id}`)
-    rectangle.addEventListener("click", () => {
-        quitRectOfSystem(obj.id)
-    })
     grid.appendChild(rectangle)
 }
 

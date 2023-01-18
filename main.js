@@ -31,36 +31,16 @@ tools.addEventListener("click", (event) => {
     element.tagName === "path" && element.parentElement.classList.add("active")
 })
 
-
-
-const findRectIncor = (corX, corY) => {
-    const state = giveState()
-    const rectangle = state.findLast(rect => {
-        const borderLeft = rect.positionX
-        const borderRigth = borderLeft + rect.width
-        const borderTop = rect.positionY
-        const borderBottom = borderTop + rect.height
-
-        if(borderLeft < corX && borderRigth > corX){
-            if(borderTop < corY && borderBottom > corY) return true
-        }
-    })
-    return rectangle
-}
-
-const changePositionXY = (rect, left, top, clickX, clickY, moveX, moveY) => {
-    const movingX = left + moveX - clickX
-    const movingY = top + moveY - clickY
-    rect.positionX = movingX >= 0 ?  movingX : 0
-    rect.positionY = movingY >= 0 ? movingY : 0
-}
-
 grid.addEventListener("mousedown", (event) => {
     const clickX = event.layerX
     const clickY = event.layerY
+    const state = giveState()
 
-    const rectangle = findRectIncor(clickX, clickY)
-    if(!rectangle) return
+    if(!event.target.id.includes("identify")) return
+    
+    const rectElement = event.target
+    const rectangleId = rectElement.id.split("-")[1]
+    const rectangle = state.find((objRect) => objRect.id == rectangleId)
     const positionX = rectangle.positionX
     const positionY = rectangle.positionY
 
@@ -70,7 +50,6 @@ grid.addEventListener("mousedown", (event) => {
         rectangle.positionX = movingX >= 0 ?  movingX : 0
         rectangle.positionY = movingY >= 0 ? movingY : 0
 
-        const state = giveState()
         drowAllRectangles(state)
         saveStateInStorage()
         insetAllRectsProps(state)
@@ -81,7 +60,6 @@ grid.addEventListener("mousedown", (event) => {
         grid.removeEventListener("mousemove", soportFunction)
     })
 })
-
 
 button.addEventListener("click", insertRectInSystem)
 

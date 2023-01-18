@@ -166,7 +166,7 @@ const insertRectProps = obj => {
         }else if(i === 4){
             input.setAttribute("type", "color")
             input.classList.add(`${properie2[i]}-${obj.id}`)
-            input.setAttribute("value", obj.background)
+            input.setAttribute("value", hslToHex(...obj.backgroundHSL))
             input.addEventListener("change", () => sprt_a(obj.id))
         }else{
             input.setAttribute("type", "button")
@@ -203,7 +203,6 @@ const insertRectInSystem = () => {
                     Number(document.getElementById("rectangle-position-y").value)
                 ]
     let [width, height, positionX, positionY] = inputs
-    console.log(inputs)
     const state = giveState()
 
     const isBadData = inputs.some(Element => isNaN(Element) )
@@ -218,13 +217,14 @@ const insertRectInSystem = () => {
         return
     }
 
-    const isBadData3 = [positionX,positionY].some(Element => Element < 0)           
+    const isBadData3 = [positionX,positionY].some(Element => Element < 0)       
     if(isBadData3) {
         alert("Error: La posicion no puede ser negativa"); 
         return
     }
 
     const colorHSL = cssRandomColorHSL(null, [30, 80], [40, 60])
+    const [colorH, colorS, colorL] = colorHSL
     
     const objRectangle = {
         id: Date.now(),
@@ -232,7 +232,8 @@ const insertRectInSystem = () => {
         height: height,
         positionX: positionX,
         positionY: positionY,
-        background: hslToHex(...colorHSL),
+        backgroundHSL: colorHSL,
+        background: `hsla(${colorH}, ${colorS}%, ${colorL}%, .9)`,
         visible: true
     }
 
