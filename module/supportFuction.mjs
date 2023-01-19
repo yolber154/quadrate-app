@@ -61,6 +61,36 @@ const hslToHex = (h, s, l) => {
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
+const hexToHSL = (hex) =>  {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      let r = parseInt(result[1], 16);
+      let g = parseInt(result[2], 16);
+      let b = parseInt(result[3], 16);
+      r /= 255, g /= 255, b /= 255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var h, s, l = (max + min) / 2;
+      if(max == min){
+        h = s = 0; // achromatic
+      }else{
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+    h = h*360
+    s = s*100
+    l = l*100
+    var HSL = new Object();
+    HSL['h']=h;
+    HSL['s']=s;
+    HSL['l']=l;
+    return [h, s, l];
+}
+
 const sprt_a = (id) => {
     const width = document.querySelector(`.width-${id}`).value
     const height = document.querySelector(`.height-${id}`).value
@@ -73,12 +103,15 @@ const sprt_a = (id) => {
     let state = giveState()
     const obj = state.find(element => element.id === id)
 
+    const colorHSL = hexToHSL(color)
+    const [colorH, colorS, colorL] = colorHSL
+
     obj.width = Number(width)
     obj.height = Number(height)
     obj.positionX = Number(positionX)
     obj.positionY = Number(positionY)
-    obj.background = color
-    obj.backgroundHSL = [0, 50, 50] // Resolver el problema del color
+    obj.backgroundHSL = colorHSL
+    obj.background = `hsla( ${colorH}, ${colorS}%, ${colorL}%, .9 )`
 
     drowAllRectangles(state)
     insetAllRectsProps(state)
@@ -168,7 +201,7 @@ const insertRectProps = obj => {
         }else if(i === 4){
             input.setAttribute("type", "color")
             input.classList.add(`${properie2[i]}-${obj.id}`)
-            input.setAttribute("value", hslToHex(obj.background[0], obj.background[1], obj.background[2] ))
+            input.setAttribute("value", hslToHex(...obj.backgroundHSL))
             input.addEventListener("change", () => sprt_a(obj.id))
         }else{
             input.setAttribute("type", "button")
