@@ -40,8 +40,8 @@ const setGridConfig  = config => {
     const objTools = new ObjTools(config)
 
     divGrid.style = `--width-column: ${objTools.grid.widthColumn}px; --height-row: ${objTools.grid.heightRow}px; --num-columns: ${objTools.grid.numColumns}; --num-rows: ${objTools.grid.numRows};`
-    drowLinesY(objTools.lines.numLinesX, objTools.grid.widthColumn * objTools.square.width)
-    drowLinesX(objTools.lines.numLinesY, objTools.grid.heightRow * objTools.square.height)
+    drowLinesY(objTools.lines.numLinesX, objTools.square.width)
+    drowLinesX(objTools.lines.numLinesY, objTools.square.height)
 }
 
 const drowRectangle = obj => {

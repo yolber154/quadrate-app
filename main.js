@@ -1,6 +1,7 @@
-import { drowRectsOfStorage, setDefaultGridConfig, drowAllRectangles } from "./module/gridFuction.mjs"
+import { drowRectsOfStorage, setDefaultGridConfig, setGridConfig, drowAllRectangles } from "./module/gridFuction.mjs"
 import { insertRectProps, insetAllRectsProps, insertRectInSystem, saveStateInStorage } from "./module/supportFuction.mjs"
 import { giveState } from "./module/state.mjs"
+import { giveConfig, ObjTools } from "./module/objectTools.mjs"
 
 const button = document.getElementById("btn-drow-rectangle")
 const tools = document.getElementById("tools")
@@ -44,7 +45,27 @@ tools.addEventListener("click", (event) => {
         grid.removeEventListener("mousedown", handleMoveGrid)
         grid.style.cursor = "auto"
     }
+
+    if(element.id === "zoom-in" || element.parentElement.id === "zoom-in"){
+        handleIncrementZoom()
+    }
+    if(element.id === "zoom-out" || element.parentElement.id === "zoom-out"){
+        handleDecrementZoom()
+    }
 })
+
+const config = giveConfig()
+const objConfig = new ObjTools(config)
+
+const handleIncrementZoom = () => {
+    objConfig.incrementZoom()
+    setGridConfig(objConfig)
+}
+
+const handleDecrementZoom = () => {
+    objConfig.decrementZoom()
+    setGridConfig(objConfig)
+}
 
 const handleMoveGrid = evt => {
     let grid
@@ -70,11 +91,9 @@ const handleMoveGrid = evt => {
     })
 }
 
-grid.addEventListener("mousedown", handleMoveGrid)
-
 const handleMoveRect = event => {
     const clickX = event.layerX
-    const clickY = event.layerY
+    const clickY = event.layerY 
     const state = giveState()
 
     if(!event.target.id.includes("identify")) return
@@ -85,9 +104,38 @@ const handleMoveRect = event => {
     const positionX = rectangle.positionX
     const positionY = rectangle.positionY
 
+    
+    const zoom = objConfig.grid.zoom
+    console.log(zoom)
+
+    let columClick = clickX / zoom
+    let rowClick = clickY / zoom
+
+    if(!Number.isInteger(columClick)){
+        columClick = Math.floor(columClick) + 1
+    }
+    if(!Number.isInteger(rowClick)){
+        rowClick = Math.floor(rowClick) + 1
+    }
+
+    console.log("ClickX: ", clickX)
+
     const handleMovingRect = (e) => {
-        const movingX = positionX + e.layerX - clickX
-        const movingY = positionY + e.layerY - clickY
+        let columnMove = e.layerX / zoom
+        let rowMove = e.layerY / zoom
+
+        if(!Number.isInteger(columnMove)){
+            columnMove = Math.floor(columnMove) + 1
+        }
+        if(!Number.isInteger(rowMove)){
+            rowMove = Math.floor(rowMove) + 1
+        }
+
+        const movingX = positionX + columnMove - columClick
+        const movingY = positionY + rowMove - rowClick
+        // console.log("diffX:", e.layerX - clickX)
+        console.log("DiffX:", e.layerX - clickX)
+        console.log("MovingX:", movingX)
         rectangle.positionX = movingX >= 0 ?  movingX : 0
         rectangle.positionY = movingY >= 0 ? movingY : 0
 
