@@ -39,7 +39,10 @@ const setGridConfig  = config => {
     const divGrid = document.getElementById("grid")
     const objTools = new ObjTools(config)
 
-    divGrid.style = `--width-column: ${objTools.grid.widthColumn}px; --height-row: ${objTools.grid.heightRow}px; --num-columns: ${objTools.grid.numColumns}; --num-rows: ${objTools.grid.numRows};`
+    divGrid.style.setProperty("--width-column", objTools.grid.widthColumn + "px")
+    divGrid.style.setProperty("--height-row", objTools.grid.heightRow + "px")
+    divGrid.style.setProperty("--num-columns", objTools.grid.numColumns)
+    divGrid.style.setProperty("--num-rows", objTools.grid.numRows)
     drowLinesY(objTools.lines.numLinesX, objTools.square.width)
     drowLinesX(objTools.lines.numLinesY, objTools.square.height)
 }

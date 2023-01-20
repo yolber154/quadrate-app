@@ -29,11 +29,11 @@ tools.addEventListener("click", (event) => {
     const element = event.target
 
     tools.forEach(element => element.classList.remove("active"))
-    element.tagName === "svg" && element.classList.add("active")
-    element.tagName === "path" && element.parentElement.classList.add("active")
-
+    
     if(element.id === "select" || element.parentElement.id === "select"){
         grid.addEventListener("mousedown", handleMoveRect)
+        element.tagName === "svg" && element.classList.add("active")
+        element.tagName === "path" && element.parentElement.classList.add("active")
     }else{
         grid.removeEventListener("mousedown", handleMoveRect)
     }
@@ -41,6 +41,8 @@ tools.addEventListener("click", (event) => {
     if(element.id === "hand" || element.parentElement.id === "hand"){
         grid.addEventListener("mousedown", handleMoveGrid)
         grid.style.cursor = "grab"
+        element.tagName === "svg" && element.classList.add("active")
+        element.tagName === "path" && element.parentElement.classList.add("active")
     }else{
         grid.removeEventListener("mousedown", handleMoveGrid)
         grid.style.cursor = "auto"
@@ -118,8 +120,6 @@ const handleMoveRect = event => {
         rowClick = Math.floor(rowClick) + 1
     }
 
-    console.log("ClickX: ", clickX)
-
     const handleMovingRect = (e) => {
         let columnMove = e.layerX / zoom
         let rowMove = e.layerY / zoom
@@ -133,9 +133,6 @@ const handleMoveRect = event => {
 
         const movingX = positionX + columnMove - columClick
         const movingY = positionY + rowMove - rowClick
-        // console.log("diffX:", e.layerX - clickX)
-        console.log("DiffX:", e.layerX - clickX)
-        console.log("MovingX:", movingX)
         rectangle.positionX = movingX >= 0 ?  movingX : 0
         rectangle.positionY = movingY >= 0 ? movingY : 0
 
@@ -149,6 +146,32 @@ const handleMoveRect = event => {
         grid.removeEventListener("mousemove", handleMovingRect)
     })
 }
+
+window.addEventListener("keydown", (e) => {
+    const svgSelect = document.getElementById("select")
+    const svgHand = document.getElementById("hand")
+
+    if(e.key === "v"){
+        grid.removeEventListener("mousedown", handleMoveGrid)
+        grid.style.cursor = "auto"
+        svgHand.classList.remove("active")
+
+        svgSelect.classList.add("active")
+        grid.addEventListener("mousedown", handleMoveRect)
+    }
+
+    if(e.key === "m"){
+        grid.removeEventListener("mousedown", handleMoveRect)
+        svgSelect.classList.remove("active")
+
+        svgHand.classList.add("active")
+        grid.addEventListener("mousedown", handleMoveGrid)
+        grid.style.cursor = "grab"
+    }
+
+    if(e.key === "+")handleIncrementZoom()
+    if(e.key === "-")handleDecrementZoom()
+})
 
 button.addEventListener("click", insertRectInSystem)
 
