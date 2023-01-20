@@ -7,6 +7,8 @@ const button = document.getElementById("btn-drow-rectangle")
 const tools = document.getElementById("tools")
 const createRectInputs = document.querySelectorAll(".left-panel .create-rectangle .inputs > input[type=\"number\"]")
 const grid = document.getElementById("grid")
+const btnMenu = document.getElementById("icon-menu")
+const menu = document.getElementById("menu")
 setDefaultGridConfig()
 
 if( localStorage.getItem("rectangles") ) {
@@ -29,7 +31,7 @@ tools.addEventListener("click", (event) => {
     const element = event.target
 
     tools.forEach(element => element.classList.remove("active"))
-    
+
     if(element.id === "select" || element.parentElement.id === "select"){
         grid.addEventListener("mousedown", handleMoveRect)
         element.tagName === "svg" && element.classList.add("active")
@@ -171,6 +173,44 @@ window.addEventListener("keydown", (e) => {
 
     if(e.key === "+")handleIncrementZoom()
     if(e.key === "-")handleDecrementZoom()
+})
+
+const resetPositionCss = (element) => {
+    element.style.top = "auto"
+    element.style.bottom = "auto"
+    element.style.left = "auto"
+    element.style.right = "auto"
+}
+
+btnMenu.addEventListener("click", (e) => {
+    e.stopPropagation()
+    menu.classList.toggle("visible")
+    resetPositionCss(menu)
+    menu.style.top = "58px"
+    menu.style.right = "20px"
+})
+
+window.addEventListener("contextmenu", (e) => {
+    e.preventDefault()
+    menu.classList.toggle("visible")
+    
+    const espacioDerecha = window.innerWidth - e.clientX
+    const espacioAbajo = window.innerHeight - e.clientY
+
+    resetPositionCss(menu)
+    if(espacioDerecha > menu.clientWidth)
+        menu.style.left = e.clientX + "px"
+    else
+        menu.style.right = espacioDerecha + "px"
+    
+    if(espacioAbajo > menu.clientHeight)
+        menu.style.top = e.clientY + "px"
+    else
+        menu.style.bottom = espacioAbajo + "px"
+})
+
+window.addEventListener("click", () => {
+    menu.classList.remove("visible")
 })
 
 button.addEventListener("click", insertRectInSystem)

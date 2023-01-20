@@ -41,12 +41,45 @@ body{
     background-color: #ccc;
 }
 
+.container .tools .icon-menu{
+    position: absolute;
+    right: 0px;
+}
+
+.container .tools .menu{
+    display: none;
+}
+
+.container .tools .menu.visible{
+    display: block;
+    min-width: 300px;
+    max-width: 450px;
+    font-size: .9rem;
+    position: absolute;
+    /* bottom: 0; */
+    /* right: 20px; */
+    z-index: 1;
+    background-color: #fff;
+    /* transform: translateY(100%); */
+    box-shadow: 0 0 4px #b0b0b0, 0 0 12px #f4f4f4;
+    border-radius: 3px;
+}
+
+.container .tools .menu .content{
+    padding: .3rem .8rem .3rem 2rem;
+}
+
+.container .tools .menu .content:hover{
+    background-color: #eaeaea;
+    cursor: default;
+}
+
 /* -------------Estilizando grid----------------- */
 
 .container .grid{
     overflow: scroll;
     position: relative;
-
+    
     display: grid;
     grid-template-columns: repeat(var(--num-columns), var(--width-column));
     grid-template-rows: repeat(var(--num-rows), var(--height-row));
