@@ -111,10 +111,9 @@ const sprt_a = (id) => {
     obj.positionX = Number(positionX)
     obj.positionY = Number(positionY)
     obj.backgroundHSL = colorHSL
-    obj.background = `hsla( ${colorH}, ${colorS}%, ${colorL}%, .9 )`
+    obj.background = `hsla(${colorH}, ${colorS}%, ${colorL}%, .9)`
 
     drowAllRectangles(state)
-    insetAllRectsProps(state)
     saveStateInStorage()
 }
 
@@ -143,7 +142,7 @@ const insertRectProps = obj => {
     const para = document.createElement("p")
 
     divRectangle.classList.add("rectangle")
-    divRectangle.classList.add("pleat")
+    if(obj.pleat) divRectangle.classList.add("pleat")
     divRectangle.style = `--border-left-color: ${obj.background}`
     wrapperSvgEye.classList.add("wrapper-svg")
     wrapperSvgArrow.classList.add("wrapper-svg")
@@ -173,6 +172,13 @@ const insertRectProps = obj => {
 
     wrapperSvgArrow.addEventListener("click", () => {
         divRectangle.classList.toggle("pleat")
+        if(divRectangle.className.includes("pleat")){
+            obj.pleat = true
+            saveStateInStorage()
+        }else{
+            obj.pleat = false
+            saveStateInStorage()
+        }
     })
 
     // Ya el divRectangle está listo para usar
@@ -269,6 +275,7 @@ const insertRectInSystem = () => {
         positionY: positionY,
         backgroundHSL: colorHSL,
         background: `hsla(${colorH}, ${colorS}%, ${colorL}%, .9)`,
+        pleat: true,
         visible: true
     }
 
