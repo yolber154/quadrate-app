@@ -212,7 +212,11 @@ const insertRectProps = obj => {
         }else{
             input.setAttribute("type", "button")
             input.setAttribute("value", "borrar rectángulo")
-            input.addEventListener("click", () => quitRectOfSystem(obj.id))
+            input.addEventListener("click", () => {
+                const _confirm = confirm("¿Estas seguro de que deseas eliminar éste rectángulo?")
+                if(!_confirm) return
+                quitRectOfSystem(obj.id)
+            })
         }
 
         para.innerText = properie[i]
